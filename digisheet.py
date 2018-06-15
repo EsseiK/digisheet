@@ -32,7 +32,7 @@
 __author__ = "Essei Kuroda"
 __credits__ = ["Essei Kuroda"]
 __license__ = "MIT"
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 __maintainer__ = "Essei Kuroda"
 __email__ = "e-kuroda@progresstech.jp"
 __status__ = "Production"
@@ -324,7 +324,7 @@ if __name__ == "__main__":
 
     # ini ファイルよりデーターを得る。
     INIFILE = configparser.ConfigParser()
-    INIFILE.read('./digisheet.ini', 'UTF-8')
+    INIFILE.read('./digisheet.ini', 'UTF-8_sig')
 
     # ログイン情報を取得する。
     CD = INIFILE.get('login', 'cd')
