@@ -32,7 +32,7 @@
 __author__ = "Essei Kuroda"
 __credits__ = ["Essei Kuroda"]
 __license__ = "MIT"
-__version__ = "1.0.1"
+__version__ = "1.0.2"
 __maintainer__ = "Essei Kuroda"
 __email__ = "e-kuroda@progresstech.jp"
 __status__ = "Production"
@@ -114,6 +114,13 @@ class Digisheet:
         self._set_forcus_to('main')
         # 最後の方に読み込まれる要素を指定し、読み込み待ち。
         self._wait_for_load('//*[@id="topb"]')
+        return
+
+    def _wait_for_load_timelog_input(self):
+        """勤怠一覧画面が最後まで読み込まれるのを待機する。"""
+        self._set_forcus_to('main')
+        # 最後の方に読み込まれる要素を指定し、読み込み待ち。
+        self._wait_for_load('/html/body/form/table/tbody/tr[4]/td/input')
         return
 
     def _wait_for_load(self, target):
@@ -256,13 +263,21 @@ class Digisheet:
         （前提）
         ・勤怠報告ページに遷移していること。
         """
+
+        # 入力が範囲外の場合何もさせない。
         if day < 1 or day > 31:
             return
 
         self._set_forcus_to('main')
+
+        # 日付のアンカーをクリック。
         target = '/html/body/form/table/tbody/tr[7]/td/table/tbody/tr[{0}]/td[3]/a'.format(
             day + 1)
         self._click(target)
+
+        # 読み込み完了待ち。
+        self._wait_for_load_timelog_input()
+
         return
 
     def register_timelog(self, time_start, time_end):
@@ -399,7 +414,6 @@ if __name__ == "__main__":
         print(" (5-1) {0}月{1}日 の勤務入力ページに遷移 ({2}/{3})".format(MONTH, day,
                                                              i, len(TARGET_DAYS)))
         DIGISHEET.goto_timelog_input(day)
-        time.sleep(5)
         print(" (5-2) 勤務時間{0}-{1}を入力し、登録".format(TIME_START, TIME_END))
         DIGISHEET.register_timelog(TIME_START, TIME_END)
 
